@@ -1,26 +1,197 @@
 @import "tailwindcss";
 
+/*
+ * Ember palette: cool light page, white paper, slate ink, one ember accent.
+ * Light is the default. Dark is used when the person picks it, or picks
+ * "System" and their device is in dark mode.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --sunken: #eef0f3;
+  --ink: #1f2430;
+  --muted: #6b7280;
+  --line: #e4e7eb;
+  --accent: #e8590c;
+  --accent-hover: #d14e08;
+  --accent-soft: #fff0e6;
+  --danger: #c92a2a;
+  --danger-soft: #fff0f0;
+  --mark: #ffe28a;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.12);
+
+  --note-sand: #fbf0cf;
+  --note-mint: #dcf3e5;
+  --note-sky: #dceafb;
+  --note-lilac: #ebe4fa;
+  --note-rose: #fbe2e7;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root[data-theme="dark"] {
+  --bg: #121418;
+  --surface: #1b1e24;
+  --sunken: #252930;
+  --ink: #e6e8eb;
+  --muted: #9aa1ac;
+  --line: #2d323b;
+  --accent: #ff7a3d;
+  --accent-hover: #ff9160;
+  --accent-soft: #3a2418;
+  --danger: #ff6b6b;
+  --danger-soft: #3a1d1f;
+  --mark: #75590f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  --note-sand: #3a3322;
+  --note-mint: #1f3329;
+  --note-sky: #1e2b3c;
+  --note-lilac: #2b2540;
+  --note-rose: #3b2329;
+  color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root[data-theme="system"] {
+    --bg: #121418;
+    --surface: #1b1e24;
+    --sunken: #252930;
+    --ink: #e6e8eb;
+    --muted: #9aa1ac;
+    --line: #2d323b;
+    --accent: #ff7a3d;
+    --accent-hover: #ff9160;
+    --accent-soft: #3a2418;
+    --danger: #ff6b6b;
+    --danger-soft: #3a1d1f;
+    --mark: #75590f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+    --note-sand: #3a3322;
+    --note-mint: #1f3329;
+    --note-sky: #1e2b3c;
+    --note-lilac: #2b2540;
+    --note-rose: #3b2329;
+    color-scheme: dark;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans: var(--font-figtree);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-figtree), system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection {
+    background: var(--accent-soft);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  mark {
+    background: var(--mark);
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 1px;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- Motion that answers an action ---------- */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes sheet-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+.anim-pop {
+  animation: pop-in 0.2s ease-out both;
+}
+.anim-fade {
+  animation: fade-in 0.16s ease-out both;
+}
+.anim-sheet {
+  animation: sheet-up 0.24s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
